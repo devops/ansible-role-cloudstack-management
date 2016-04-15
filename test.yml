@@ -1,0 +1,36 @@
+- name: Install Cloudstack Management master
+  hosts: cloudstack_master
+  vars:
+    cloudstack_repo: "http://cloudstack.apt-get.eu/centos"
+    cloudstack_ver: "4.4"
+    cloudstack_master: true
+    cloudstack_usage: true
+    cloudstack_mysql_host: "127.0.0.1"
+    cloudstack_mysql_port: 3306
+    cloudstack_mysql_user: "cloud"
+    cloudstack_mysql_password: "cloud"
+    cloudstack_mysql_root_password: "password"
+    cloudstack_templates_url: "http://cloudstack.apt-get.eu/systemvm/4.4"
+    cloudstack_seckey: "password"
+    cloudstack_nfs_export_ip: "127.0.0.1"
+    cloudstack_tmplt_diskspace: 1020000
+    cloudstack_systemvm_kvm:
+      enable: true
+      template_name: "systemvm64template-4.4.1-7-kvm.qcow2.bz2"
+  roles:
+    - ansible-role-cloudstack-common
+    - ansible-role-cloudstack-management
+
+- name: Install Cloudstack Management node
+  hosts: cloudstack_node
+  vars:
+    cloudstack_repo: "http://cloudstack.apt-get.eu/centos"
+    cloudstack_ver: "4.4"
+    cloudstack_node: true
+    cloudstack_mysql_host: "127.0.0.1"
+    cloudstack_mysql_port: 3306
+    cloudstack_mysql_user: "cloud"
+    cloudstack_mysql_password: "cloud"
+  roles:
+    - ansible-role-cloudstack-common
+    - ansible-role-cloudstack-management

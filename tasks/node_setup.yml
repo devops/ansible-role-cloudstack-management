@@ -1,0 +1,8 @@
+---
+# tasks file for cloudstack node management setup
+
+- name: Cloudstack setup databases
+  command: /usr/bin/cloudstack-setup-databases  {{ cloudstack_mysql_user }}:{{ cloudstack_mysql_password }}@{{ cloudstack_mysql_host }} -m {{ cloudstack_seckey }} -k {{ cloudstack_seckey }}
+
+- name: Setup CloudStack manager
+  command: /usr/bin/cloudstack-setup-management

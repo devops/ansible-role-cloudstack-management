@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: z@zstack.net
+  description: Install Apache Cloudstack Management.
+  company:
+  license: license (BSD, MIT)
+  min_ansible_version: 1.8
+  platforms:
+  - name: EL
+    versions:
+    - 6
+    - 7
+  categories:
+  - cloud
+dependencies: []

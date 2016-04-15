@@ -1,0 +1,28 @@
+---
+# tasks file for secondary storage setup
+
+- name: Ensure secondary storage mount exists
+  file: path={{ cloudstack_nfs_mount_path }} state=directory
+
+- name: Ensure  secondary storage is mounted
+  mount: name={{ cloudstack_nfs_mount_path }} src={{ cloudstack_nfs_export_ip }}:{{ cloudstack_nfs_export_path }} fstype=nfs state=mounted opts=nolock
+
+- name: Fix cloud install sys tmplt DISKSPACE
+  lineinfile: >
+    dest="/usr/share/cloudstack-common/scripts/storage/secondary/cloud-install-sys-tmplt"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    state=present
+  with_items:
+    - { regexp: "DISKSPACE=5120000", line: "DISKSPACE={{ cloudstack_tmplt_diskspace }}" }
+
+- name: Register VMware Systemvm Template
+  command: /usr/share/cloudstack-common/scripts/storage/secondary/cloud-install-sys-tmplt -m {{ cloudstack_nfs_mount_path }} -u {{ cloudstack_templates_url }}/{{ cloudstack_systemvm_vmware.template_name }} -h vmware -F -s {{ cloudstack_seckey }}
+  when: cloudstack_systemvm_vmware.enable
+
+- name: Register KVM Systemvm Template
+  command: /usr/share/cloudstack-common/scripts/storage/secondary/cloud-install-sys-tmplt -m {{ cloudstack_nfs_mount_path }} -u {{ cloudstack_templates_url }}/{{ cloudstack_systemvm_kvm.template_name }} -h kvm -F -s {{ cloudstack_seckey }}
+  when: cloudstack_systemvm_kvm.enable
+
+- name: Ensure  secondary storage is unmounted
+  command: umount {{ cloudstack_nfs_mount_path }}

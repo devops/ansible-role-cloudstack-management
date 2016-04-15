@@ -1,0 +1,8 @@
+---
+# tasks file for cloudstack master management setup
+
+- name: Cloudstack setup databases
+  command: /usr/bin/cloudstack-setup-databases  {{ cloudstack_mysql_user }}:{{ cloudstack_mysql_password }}@{{ cloudstack_mysql_host }} --deploy-as=root:{{ cloudstack_mysql_root_password }} -m {{ cloudstack_seckey }} -k {{ cloudstack_seckey }}
+
+- name: Setup CloudStack manager
+  command: /usr/bin/cloudstack-setup-management

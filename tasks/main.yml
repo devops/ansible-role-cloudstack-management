@@ -1,0 +1,26 @@
+---
+# tasks file for ansible-role-cloudstack-management
+
+- name: Install Requires Packages for Cloudstack Management
+  yum: name={{ item }} state=present
+  with_items:
+    - java-1.7.0-openjdk
+
+- name: Ensure CloudStack Management packages are installed
+  yum: name=cloudstack-management state=present
+
+- name: Ensure CloudStack Usage packages are installed
+  yum: name=cloudstack-usage state=present
+  when: cloudstack_usage
+
+- name: Setup Master Cloudstack Management
+  include: master_setup.yml
+  when: cloudstack_master
+
+- name: Setup Secondary Storage And Systemvm Template
+  include: secondary_storage.yml
+  when: cloudstack_master
+
+- name: Setup Node Cloudstack Management
+  include: node_setup.yml
+  when: cloudstack_node
